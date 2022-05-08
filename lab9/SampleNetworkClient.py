@@ -55,6 +55,8 @@ class SimpleNetworkClient :
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"LOGOUT %s" % pw, ("127.0.0.1", p))
         msg, addr = s.recvfrom(1024)
+        print("Logged out")
+        print(msg.strip())
         return msg.strip()
 
     def updateInfTemp(self, frame) :
@@ -68,6 +70,7 @@ class SimpleNetworkClient :
         self.infTemps = self.infTemps[-30:]
         self.infLn.set_data(range(30), self.infTemps)
         self.logout(self.infPort, b"!Q#E%T&U8i6y4r2w")
+        self.infToken = None
         return self.infLn,
 
     def updateIncTemp(self, frame) :
@@ -79,6 +82,7 @@ class SimpleNetworkClient :
         #self.incTemps.append(self.incTemps[-1] + 1)
         self.incTemps = self.incTemps[-30:]
         self.incLn.set_data(range(30), self.incTemps)
+        self.incToken = None
         return self.incLn,
 """
 snc = SimpleNetworkClient(23456, 23457)
