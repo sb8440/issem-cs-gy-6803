@@ -55,7 +55,7 @@ class SmartNetworkThermometer (threading.Thread) :
     def processCommands(self, msg, addr) :
         cmds = msg.split(';')
         print("in process")
-        
+
         for c in cmds :
             cs = c.split(' ')
             if len(cs) == 2 : #should be either AUTH or LOGOUT
@@ -68,9 +68,12 @@ class SmartNetworkThermometer (threading.Thread) :
                         #print (self.tokens[-1])
                 elif cs[0] == "LOGOUT":
                     print("in logout")
+                    print(cs[1])
+                    print(self.tokens)
                     if cs[1] in self.tokens :
                         print("remove token")
                         self.tokens.remove(cs[1])
+                        print(self.tokens)
                 else : #unknown command
                     self.serverSocket.sendto(b"Invalid Command\n", addr)
             elif c == "SET_DEGF" :
