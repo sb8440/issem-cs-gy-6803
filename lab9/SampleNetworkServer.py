@@ -54,7 +54,6 @@ class SmartNetworkThermometer (threading.Thread) :
 
     def processCommands(self, msg, addr) :
         cmds = msg.split(';')
-        print("in process")
 
         for c in cmds :
             cs = c.split(' ')
@@ -67,13 +66,8 @@ class SmartNetworkThermometer (threading.Thread) :
                         self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
                         #print (self.tokens[-1])
                 elif cs[0] == "LOGOUT":
-                    print("in logout")
-                    print(cs[1])
-                    print(self.tokens)
                     if cs[1] in self.tokens :
-                        print("remove token")
                         self.tokens.remove(cs[1])
-                        print(self.tokens)
                         self.serverSocket.sendto("None".encode("utf-8"), addr)
                 else : #unknown command
                     self.serverSocket.sendto(b"Invalid Command\n", addr)
@@ -101,11 +95,14 @@ class SmartNetworkThermometer (threading.Thread) :
                 print(cmds)
                 if len(cmds) == 1 : # protected commands case
                     semi = msg.find(';')
+                    print(semi)
                     if semi != -1 : #if we found the semicolon
-                        #print (msg)
+                        print (msg)
                         if msg[:semi] in self.tokens : #if its a valid token
+                            print("valid token ")
                             self.processCommands(msg[semi+1:], addr)
                         else :
+                            print("invalid token")
                             self.serverSocket.sendto(b"Bad Token\n", addr)
                     else :
                             self.serverSocket.sendto(b"Bad Command\n", addr)
