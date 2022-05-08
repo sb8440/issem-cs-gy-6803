@@ -74,6 +74,7 @@ class SmartNetworkThermometer (threading.Thread) :
                         print("remove token")
                         self.tokens.remove(cs[1])
                         print(self.tokens)
+                        self.serverSocket.sendto("None".encode("utf-8"), addr)
                 else : #unknown command
                     self.serverSocket.sendto(b"Invalid Command\n", addr)
             elif c == "SET_DEGF" :

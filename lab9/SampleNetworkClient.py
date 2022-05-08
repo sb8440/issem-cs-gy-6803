@@ -51,13 +51,19 @@ class SimpleNetworkClient :
         return msg.strip()
 
     # NEW METHOD to invoke logout command
-    def logout(self, p, tok) :
+    def logout(self, p, tok, inf) :
         print("in logout")
         s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         s.sendto(b"LOGOUT %s" % tok, ("127.0.0.1", p))
         print("sent command")
         msg, addr = s.recvfrom(1024)
         print("Logged out")
+        m = msg.decode("utf-8")
+        if m == "None":
+            if (inf == 0):
+                self.infToken = None
+            else:
+                self.incToken = None
         print(msg.strip())
         return msg.strip()
 
@@ -71,7 +77,7 @@ class SimpleNetworkClient :
         #self.infTemps.append(self.infTemps[-1] + 1)
         self.infTemps = self.infTemps[-30:]
         self.infLn.set_data(range(30), self.infTemps)
-        self.logout(self.infPort, self.infToken)
+        self.logout(self.infPort, self.infToken, 0)
         self.infToken = None
         return self.infLn,
 
