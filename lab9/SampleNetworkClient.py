@@ -67,7 +67,7 @@ class SimpleNetworkClient :
         #self.infTemps.append(self.infTemps[-1] + 1)
         self.infTemps = self.infTemps[-30:]
         self.infLn.set_data(range(30), self.infTemps)
-        self.logout(self.incPort, b"!Q#E%T&U8i6y4r2w")
+        self.logout(self.infPort, b"!Q#E%T&U8i6y4r2w")
         return self.infLn,
 
     def updateIncTemp(self, frame) :
