@@ -58,7 +58,7 @@ class SimpleNetworkClient :
         msg, addr = s.recvfrom(1024)
         print("Logged out")
         m = msg.decode("utf-8")
-        if m == "None":
+        if m == "Token revoked":
             if (inf == 0):
                 self.infToken = None
             else:
