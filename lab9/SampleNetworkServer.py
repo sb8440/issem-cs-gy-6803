@@ -1,7 +1,7 @@
 import threading
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import infinc
+from Incubator import infinc
 import time
 import math
 import socket
@@ -54,16 +54,22 @@ class SmartNetworkThermometer (threading.Thread) :
 
     def processCommands(self, msg, addr) :
         cmds = msg.split(';')
+        print("in process")
+        
         for c in cmds :
             cs = c.split(' ')
             if len(cs) == 2 : #should be either AUTH or LOGOUT
                 if cs[0] == "AUTH":
+                    print("in auth")
                     if cs[1] == "!Q#E%T&U8i6y4r2w" :
+                        print("matched token")
                         self.tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
                         self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
                         #print (self.tokens[-1])
                 elif cs[0] == "LOGOUT":
+                    print("in logout")
                     if cs[1] in self.tokens :
+                        print("remove token")
                         self.tokens.remove(cs[1])
                 else : #unknown command
                     self.serverSocket.sendto(b"Invalid Command\n", addr)
@@ -87,6 +93,8 @@ class SmartNetworkThermometer (threading.Thread) :
                 msg, addr = self.serverSocket.recvfrom(1024)
                 msg = msg.decode("utf-8").strip()
                 cmds = msg.split(' ')
+                print("in run")
+                print(cmds)
                 if len(cmds) == 1 : # protected commands case
                     semi = msg.find(';')
                     if semi != -1 : #if we found the semicolon
@@ -168,6 +176,7 @@ class SimpleClient :
         self.incLn.set_data(range(30), self.incTemps)
         return self.incLn,
 
+    """
 UPDATE_PERIOD = .05 #in seconds
 SIMULATION_STEP = .1 #in seconds
 
@@ -194,3 +203,4 @@ sc = SimpleClient(bobThermo, incThermo)
 
 plt.grid()
 plt.show()
+"""
