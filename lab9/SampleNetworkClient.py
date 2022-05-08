@@ -50,15 +50,24 @@ class SimpleNetworkClient :
         msg, addr = s.recvfrom(1024)
         return msg.strip()
 
+    # NEW METHOD to invoke logout command
+    def logout(self, p, pw) :
+        s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        s.sendto(b"LOGOUT %s" % pw, ("127.0.0.1", p))
+        msg, addr = s.recvfrom(1024)
+        return msg.strip()
+
     def updateInfTemp(self, frame) :
         self.updateTime()
         if self.infToken is None : #not yet authenticated
+            print("not authenticated")
             self.infToken = self.authenticate(self.infPort, b"!Q#E%T&U8i6y4r2w")
 
         self.infTemps.append(self.getTemperatureFromPort(self.infPort, self.infToken)-273)
         #self.infTemps.append(self.infTemps[-1] + 1)
         self.infTemps = self.infTemps[-30:]
         self.infLn.set_data(range(30), self.infTemps)
+        self.logout(self.incPort, b"!Q#E%T&U8i6y4r2w")
         return self.infLn,
 
     def updateIncTemp(self, frame) :
