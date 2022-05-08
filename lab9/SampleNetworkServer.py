@@ -59,9 +59,7 @@ class SmartNetworkThermometer (threading.Thread) :
             cs = c.split(' ')
             if len(cs) == 2 : #should be either AUTH or LOGOUT
                 if cs[0] == "AUTH":
-                    print("in auth")
                     if cs[1] == "!Q#E%T&U8i6y4r2w" :
-                        print("matched token")
                         self.tokens.append(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16)))
                         self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
                         #print (self.tokens[-1])
@@ -91,18 +89,12 @@ class SmartNetworkThermometer (threading.Thread) :
                 msg, addr = self.serverSocket.recvfrom(1024)
                 msg = msg.decode("utf-8").strip()
                 cmds = msg.split(' ')
-                print("in run")
-                print(cmds)
                 if len(cmds) == 1 : # protected commands case
                     semi = msg.find(';')
-                    print(semi)
                     if semi != -1 : #if we found the semicolon
-                        print (msg)
                         if msg[:semi] in self.tokens : #if its a valid token
-                            print("valid token ")
                             self.processCommands(msg[semi+1:], addr)
                         else :
-                            print("invalid token")
                             self.serverSocket.sendto(b"Bad Token\n", addr)
                     else :
                             self.serverSocket.sendto(b"Bad Command\n", addr)
