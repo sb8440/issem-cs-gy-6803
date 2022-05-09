@@ -64,7 +64,7 @@ class SmartNetworkThermometer (threading.Thread) :
                         self.serverSocket.sendto(self.tokens[-1].encode("utf-8"), addr)
                         #print (self.tokens[-1])
                     else:
-                        self.serverSocket.sendto(b"Invalid Command\n", addr)
+                        self.serverSocket.sendto(b"Authentication not successful. Please try again.\n", addr)
                 elif cs[0] == "LOGOUT":
                     if cs[1] in self.tokens :
                         self.tokens.remove(cs[1])
